@@ -58,6 +58,7 @@ Built with modern web technologies and designed as an exploration project for fu
 
 ## Project Structure
 
+```bash
 src/
 ├── app/ # App Router pages
 ├── components/ # Reusable UI components
@@ -65,7 +66,7 @@ src/
 ├── services/ # API and external service logic
 ├── store/ # State management
 ├── types/ # TypeScript types
-
+```
 
 ---
 
