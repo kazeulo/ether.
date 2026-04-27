@@ -6,9 +6,9 @@ export default function FeaturesGrid() {
       <div className="max-w-5xl mx-auto px-6 py-20">
         <div className="text-center mb-14">
           <p className="text-teal text-[0.7rem] tracking-[0.2em] uppercase font-medium mb-3">Why bingelog</p>
-          <h2 className="font-display text-[clamp(1.75rem,3vw,2.5rem)] font-bold leading-snug">
+          <h2 className="font-display text-[clamp(2rem,3vw,2.5rem)] font-bold leading-snug">
             Everything you need to remember<br />
-            <em className="italic font-body text-text-secondary font-normal">what you loved</em>
+            <em className="italic font-logo text-text-secondary font-normal">what you loved</em>
           </h2>
         </div>
 
