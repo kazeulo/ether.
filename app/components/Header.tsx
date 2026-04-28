@@ -1,9 +1,8 @@
 import Link from "next/link";
 
 const navLinks = [
-  { label: "Discover", href: "/discover" },
+  { label: "Home", href: "/" },
   { label: "About",    href: "/about"    },
-  { label: "FAQs",     href: "/faqs"     },
 ];
 
 export default function Header() {
