@@ -5,8 +5,9 @@ export default function Footer() {
     <footer className="relative z-10 border-t border-border-subtle">
 			<div className="max-w-5xl mx-auto px-6 py-8 flex items-center justify-between flex-wrap gap-4">
 				<Link href="/" className="flex items-baseline">
-					<span className="font-logo italic text-2xl tracking-tight text-text-primary">binge</span>
-					<span className="font-logo text-2xl tracking-tight text-violet">log</span>
+					<span className="font-body text-md font-light tracking-[0.18em] text-text-primary uppercase">
+						ether
+					</span>
 				</Link>
 				<p className="text-text-muted text-xs">© {new Date().getFullYear()} bingelog. All rights reserved.</p>
 				<div className="flex gap-6">

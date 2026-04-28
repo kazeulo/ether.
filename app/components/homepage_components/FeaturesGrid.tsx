@@ -18,7 +18,7 @@ export default function FeaturesGrid() {
               key={i}
               className="bg-bg-card border border-border-subtle rounded-lg p-7 hover:bg-bg-card-hover hover:border-border-medium hover:-translate-y-0.5 transition-all"
             >
-              <div className="w-10 h-10 rounded-lg bg-bg-base border border-border-medium flex items-center justify-center text-violet text-lg mb-5">
+              <div className="w-10 h-10 rounded-lg bg-bg-binge border border-border-medium flex items-center justify-center text-violet text-lg mb-5">
                 {f.icon}
               </div>
               <h3 className="font-display text-sm font-bold mb-2">{f.title}</h3>

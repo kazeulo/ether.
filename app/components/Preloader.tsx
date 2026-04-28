@@ -3,98 +3,128 @@
 import { useEffect, useState } from "react";
 
 export default function Preloader() {
-  const [visible, setVisible] = useState(true);
-  const [fading, setFading] = useState(false);
+  const [visible, setVisible]   = useState(true);
+  const [fading, setFading]     = useState(false);
+  const [phase, setPhase]       = useState(0);
 
   useEffect(() => {
-    // Start fade out after 2.2s, remove from DOM after transition completes
-    const fadeTimer = setTimeout(() => setFading(true), 2200);
-    const removeTimer = setTimeout(() => setVisible(false), 2900);
-    return () => {
-      clearTimeout(fadeTimer);
-      clearTimeout(removeTimer);
-    };
+    const p1 = setTimeout(() => setPhase(1), 400);
+    const p2 = setTimeout(() => setPhase(2), 1200);
+    const p3 = setTimeout(() => setFading(true), 2400);
+    const p4 = setTimeout(() => setVisible(false), 3200);
+    return () => [p1, p2, p3, p4].forEach(clearTimeout);
   }, []);
 
   if (!visible) return null;
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-bg-base"
+      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center"
       style={{
-        transition: "opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1)",
+        background: "#080b12",
         opacity: fading ? 0 : 1,
+        transition: "opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
         pointerEvents: fading ? "none" : "all",
       }}
     >
-      {/* Orbiting rings */}
-      <div className="relative flex items-center justify-center w-32 h-32 mb-8">
 
-        {/* Outer ring */}
+      {/* Mist particles */}
+      {[...Array(12)].map((_, i) => (
         <div
-          className="absolute rounded-full border border-violet/20"
+          key={i}
+          className="absolute rounded-full"
           style={{
-            width: 128, height: 128,
-            animation: "spin 6s linear infinite",
+            width:  `${2 + (i % 3)}px`,
+            height: `${2 + (i % 3)}px`,
+            top:    `${20 + (i * 17.3) % 60}%`,
+            left:   `${10 + (i * 23.7) % 80}%`,
+            background: i % 3 === 0
+              ? "rgba(184,196,224,0.3)"
+              : i % 3 === 1
+              ? "rgba(168,157,232,0.2)"
+              : "rgba(126,200,200,0.2)",
+            animation: `mist-float ${6 + (i % 4)}s ease-in-out infinite`,
+            animationDelay: `${(i * 0.4) % 4}s`,
+            opacity: phase >= 1 ? 1 : 0,
+            transition: "opacity 1.2s ease",
           }}
-        >
-          {/* Orbiting dot on outer ring */}
-          <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-violet shadow-[0_0_8px_2px_rgba(180,142,240,0.8)]" />
-        </div>
+        />
+      ))}
 
-        {/* Middle ring */}
-        <div
-          className="absolute rounded-full border border-teal/20"
-          style={{
-            width: 88, height: 88,
-            animation: "spin 4s linear infinite reverse",
-          }}
-        >
-          <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-teal shadow-[0_0_6px_2px_rgba(94,232,208,0.8)]" />
-        </div>
-
-        {/* Inner ring */}
-        <div
-          className="absolute rounded-full border border-rose/20"
-          style={{
-            width: 52, height: 52,
-            animation: "spin 2.5s linear infinite",
-          }}
-        >
-          <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-rose shadow-[0_0_5px_1px_rgba(240,122,154,0.8)]" />
-        </div>
-
-        {/* Core star */}
-        <div className="w-3 h-3 rounded-full bg-violet shadow-[0_0_16px_4px_rgba(180,142,240,0.6)]" />
-      </div>
-
-      {/* Logo */}
+      {/* Central glow */}
       <div
-        className="flex items-baseline gap-0.5"
-        style={{ animation: "preloader-fade-in 0.6s ease both 0.3s" }}
+        className="absolute rounded-full"
+        style={{
+          width: "320px",
+          height: "320px",
+          background: "radial-gradient(circle, rgba(184,196,224,0.04) 0%, transparent 70%)",
+          animation: "breathe 4s ease-in-out infinite",
+        }}
+      />
+
+      {/* Wordmark */}
+      <div
+        className="relative flex flex-col items-center"
+        style={{
+          opacity: phase >= 1 ? 1 : 0,
+          transform: phase >= 1 ? "translateY(0)" : "translateY(12px)",
+          transition: "opacity 1s ease, transform 1s ease",
+        }}
       >
-        <span className="font-display italic text-2xl font-bold tracking-tight text-text-primary">binge</span>
-        <span className="font-display text-2xl font-black tracking-tight text-violet">log</span>
+        {/* The word */}
+        <div className="flex items-center gap-px">
+          <span
+            className="font-body font-light tracking-[0.35em] uppercase text-2xl"
+            style={{ color: "var(--color-text-primary)" }}
+          >
+            ether
+          </span>
+          <span
+            className="w-1.5 h-1.5 rounded-full mb-4 ml-1"
+            style={{
+              background: "var(--color-mist)",
+              boxShadow: "0 0 8px 2px rgba(184,196,224,0.4)",
+              animation: "breathe 3s ease-in-out infinite",
+            }}
+          />
+        </div>
+
+        {/* Tagline — phases in slightly after */}
+        <p
+          className="text-[0.6rem] tracking-[0.4em] uppercase mt-3"
+          style={{
+            color: "rgba(184,196,224,0.35)",
+            opacity: phase >= 2 ? 1 : 0,
+            transform: phase >= 2 ? "translateY(0)" : "translateY(6px)",
+            transition: "opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s",
+          }}
+        >
+          every story leaves a mark
+        </p>
       </div>
 
-      {/* Tagline */}
-      <p
-        className="text-text-muted text-[0.7rem] tracking-[0.25em] uppercase mt-2"
-        style={{ animation: "preloader-fade-in 0.6s ease both 0.6s" }}
-      >
-        Your personal media universe
-      </p>
+      {/* Bottom mist line */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-px"
+        style={{
+          background: "linear-gradient(to right, transparent, rgba(184,196,224,0.08), transparent)",
+          opacity: phase >= 1 ? 1 : 0,
+          transition: "opacity 1.5s ease",
+        }}
+      />
 
       <style>{`
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to   { transform: rotate(360deg); }
+        @keyframes mist-float {
+          0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.4; }
+          33%       { transform: translateY(-8px) translateX(4px); opacity: 0.8; }
+          66%       { transform: translateY(4px) translateX(-4px); opacity: 0.3; }
         }
-        @keyframes preloader-fade-in {
-          from { opacity: 0; transform: translateY(6px); }
-          to   { opacity: 1; transform: translateY(0); }
+        @keyframes breathe {
+          0%, 100% { opacity: 0.6; transform: scale(1); }
+          50%       { opacity: 1;   transform: scale(1.08); }
         }
       `}</style>
+
     </div>
   );
 }

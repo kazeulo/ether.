@@ -19,7 +19,7 @@ const poppins = Poppins({
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
-  style: ["normal", "italic"], // important for that elegant look
+  style: ["normal", "italic"],
   variable: "--font-playfair",
 });
 

@@ -2,31 +2,32 @@
 @import "tailwindcss";
 
 @theme {
-  /* Deep space backgrounds */
-  --color-bg-base:        #07080f;
-  --color-bg-surface:     #0d0f1c;
-  --color-bg-card:        #131628;
-  --color-bg-card-hover:  #191d33;
+  /* Ether backgrounds — lifted, dreamy, like twilight not midnight */
+  --color-bg-base:        #12152a;
+  --color-bg-surface:     #171b30;
+  --color-bg-card:        #1d2238;
+  --color-bg-card-hover:  #222840;
 
-  /* Accent — stardust gold, nebula violet, comet teal */
-  --color-gold:           #f0c96a;
-  --color-gold-dim:       #c9a044;
-  --color-violet:         #b48ef0;
-  --color-rose:           #f07a9a;
-  --color-teal:           #5ee8d0;
+  /* Accents — kept atmospheric, slightly brighter to show on lighter bg */
+  --color-gold:           #eddcb0;
+  --color-gold-dim:       #c4a870;
+  --color-violet:         #b8aef0;
+  --color-rose:           #d49aae;
+  --color-teal:           #8ed4d4;
+  --color-mist:           #c8d4f0;
 
-  /* Text */
-  --color-text-primary:   #eceaf8;
-  --color-text-secondary: #8a88a8;
-  --color-text-muted:     #44425a;
+  /* Text — warmer, more readable on lighter base */
+  --color-text-primary:   #e8f0ff;
+  --color-text-secondary: #8a96b8;
+  --color-text-muted:     #4a5278;
 
-  /* Borders */
-  --color-border-subtle:  rgba(255,255,255,0.05);
-  --color-border-medium:  rgba(255,255,255,0.09);
+  /* Borders — slightly more visible on the lighter bg */
+  --color-border-subtle:  rgba(200,212,240,0.07);
+  --color-border-medium:  rgba(200,212,240,0.13);
 
-  --font-logo: "Playfair Display", serif;
-  --font-display: "Montserrat", sans-serif;
-  --font-body:    "Poppins", sans-serif;
+  --font-logo:     "Playfair Display", serif;
+  --font-display:  "Montserrat", sans-serif;
+  --font-body:     "Poppins", sans-serif;
 }
 
 @layer base {
@@ -63,7 +64,7 @@
   ::-webkit-scrollbar-thumb { background: var(--color-text-muted); border-radius: 9999px; }
 
   ::selection {
-    background: rgba(180, 142, 240, 0.25);
+    background: rgba(184,174,240,0.25);
     color: var(--color-violet);
   }
 }
@@ -79,8 +80,8 @@
   }
 
   @keyframes twinkle {
-    0%, 100% { opacity: 0.15; }
-    50%       { opacity: 0.9; }
+    0%, 100% { opacity: 0.08; }
+    50%       { opacity: 0.5;  }
   }
 
   .star {
@@ -91,7 +92,7 @@
   }
 }
 
-/* Moving glow orbs */
+/* Glow orb drift animations — slowed for dreamier feel */
 @keyframes drift-1 {
   0%   { transform: translate(0, 0) scale(1); }
   33%  { transform: translate(60px, -40px) scale(1.15); }
@@ -110,12 +111,6 @@
   100% { transform: translate(0, 0) scale(1); }
 }
 
-.glow-orb-1 {
-  animation: drift-1 10s ease-in-out infinite;
-}
-.glow-orb-2 {
-  animation: drift-2 14s ease-in-out infinite;
-}
-.glow-orb-3 {
-  animation: drift-3 28s ease-in-out infinite;
-}
+.glow-orb-1 { animation: drift-1 18s ease-in-out infinite; }
+.glow-orb-2 { animation: drift-2 24s ease-in-out infinite; }
+.glow-orb-3 { animation: drift-3 36s ease-in-out infinite; }
