@@ -3,21 +3,32 @@
 import Link from "next/link";
 import { useState } from "react";
 
-const stars = Array.from({ length: 60 }, (_, i) => ({
-  top: `${(i * 37.3) % 100}%`,
-  left: `${(i * 61.8) % 100}%`,
-  size: (i % 3) + 1,
+const stars = Array.from({ length: 50 }, (_, i) => ({
+  top:      `${(i * 37.3) % 100}%`,
+  left:     `${(i * 61.8) % 100}%`,
+  size:     (i % 3) + 1,
   duration: `${3 + (i % 5)}s`,
-  delay: `${(i * 0.37) % 5}s`,
+  delay:    `${(i * 0.37) % 5}s`,
 }));
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
+  const [email, setEmail]       = useState("");
   const [password, setPassword] = useState("");
-  const [focused, setFocused] = useState<string | null>(null);
+  const [focused, setFocused]   = useState<string | null>(null);
+
+  const inputStyle = (field: string) => ({
+    borderColor: focused === field
+      ? "rgba(200,212,240,0.3)"
+      : "rgba(200,212,240,0.07)",
+    boxShadow: focused === field
+      ? "0 0 0 3px rgba(184,196,224,0.06)"
+      : "none",
+    background: "rgba(255,255,255,0.03)",
+    transition: "border-color 0.2s ease, box-shadow 0.2s ease",
+  });
 
   return (
-    <div className="min-h-screen bg-bg-base text-text-primary flex items-center justify-center py-2 px-6 relative overflow-hidden">
+    <div className="min-h-screen bg-bg-base text-text-primary flex relative overflow-hidden">
 
       {/* Starfield */}
       <div className="fixed inset-0 pointer-events-none">
@@ -26,154 +37,180 @@ export default function LoginPage() {
             key={i}
             className="star absolute rounded-full bg-white"
             style={{
-              top: s.top,
-              left: s.left,
-              width: s.size,
-              height: s.size,
+              top: s.top, left: s.left,
+              width: s.size, height: s.size,
               animationDuration: s.duration,
               animationDelay: s.delay,
             }}
           />
         ))}
-
-        <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-violet/8 blur-[130px]" />
-        <div className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full bg-teal/6 blur-[110px]" />
-        <div className="absolute top-[40%] left-[40%] w-[300px] h-[300px] rounded-full bg-rose/4 blur-[90px]" />
+        <div className="glow-orb-1 absolute top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full blur-[130px]"
+          style={{ background: "rgba(184,174,240,0.07)" }} />
+        <div className="glow-orb-2 absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full blur-[110px]"
+          style={{ background: "rgba(142,212,212,0.05)" }} />
       </div>
 
-      {/* Page wrapper */}
-      <div className="relative z-10 w-full max-w-lg animate-fade-up">
+      {/* Left panel — decorative */}
+      <div className="hidden lg:flex flex-col justify-between w-[45%] relative px-16 py-14 border-r border-border-subtle">
 
         {/* Logo */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-baseline gap-0.5">
-            <span className="font-display italic text-5xl font-bold tracking-tight">
-              binge
-            </span>
-            <span className="font-display text-5xl font-black tracking-tight text-violet">
-              log
-            </span>
-          </Link>
-          <p className="text-text-muted text-xs tracking-[0.25em] uppercase mt-3">
-            Welcome back
+        <Link href="/" className="flex items-center gap-1 group">
+          <span className="font-body font-light tracking-[0.3em] uppercase text-lg text-text-primary">
+            ether
+          </span>
+          <span
+            className="w-1.5 h-1.5 rounded-full mb-3 ml-0.5 group-hover:scale-125 transition-transform"
+            style={{ background: "var(--color-mist)", boxShadow: "0 0 6px 2px rgba(200,212,240,0.3)" }}
+          />
+        </Link>
+
+        {/* Quote */}
+        <div className="max-w-xs">
+          <p
+            className="font-display text-[2rem] font-black leading-[1.1] tracking-tight mb-6"
+            style={{ color: "var(--color-text-primary)" }}
+          >
+            Every world you&apos;ve{" "}
+            <em className="not-italic" style={{ color: "var(--color-mist)" }}>entered</em>
+            ,{" "}
+            <em className="not-italic" style={{ color: "var(--color-gold)" }}>remembered</em>.
+          </p>
+          <p className="text-xs tracking-[0.25em] uppercase" style={{ color: "var(--color-mist)", opacity: 0.4 }}>
+            your stories live here
           </p>
         </div>
 
-        {/* CARD (MATCHED STYLE) */}
-        <div className="bg-bg-card border border-border-subtle rounded-2xl px-4 py-4 relative overflow-hidden">
-
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-teal/40 to-transparent" />
-
-          <h1 className="font-display text-4xl font-bold mb-2 text-center">
-            Sign in
-          </h1>
-
-          <p className="text-text-secondary text-base mb-10 text-center">
-            Don&apos;t have an account?{" "}
-            <Link href="/register" className="text-violet hover:underline">
-              Create one
-            </Link>
-          </p>
-
-          {/* INNER CONTAINER (SAME AS REGISTER) */}
-          <div className="px-2 sm:px-4 max-w-md mx-auto">
-
-            <div className="flex flex-col gap-8">
-
-              {/* Email */}
-              <div className="flex flex-col gap-2">
-                <label className="text-xs tracking-[0.15em] uppercase text-text-muted font-medium">
-                  Email
-                </label>
-
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  onFocus={() => setFocused("email")}
-                  onBlur={() => setFocused(null)}
-                  placeholder="you@example.com"
-                  className="w-full bg-bg-surface border rounded-xl px-4 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none transition-all"
-                  style={{
-                    borderColor:
-                      focused === "email"
-                        ? "var(--color-violet)"
-                        : "var(--color-border-medium)",
-                    boxShadow:
-                      focused === "email"
-                        ? "0 0 0 3px rgba(180,142,240,0.1)"
-                        : "none",
-                  }}
-                />
-              </div>
-
-              {/* Password */}
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center justify-between">
-                  <label className="text-xs tracking-[0.15em] uppercase text-text-muted font-medium">
-                    Password
-                  </label>
-
-                  <Link
-                    href="/forgot-password"
-                    className="text-xs text-text-muted hover:text-violet transition-colors"
-                  >
-                    Forgot password?
-                  </Link>
-                </div>
-
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  onFocus={() => setFocused("password")}
-                  onBlur={() => setFocused(null)}
-                  placeholder="••••••••"
-                  className="w-full bg-bg-surface border rounded-xl px-4 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none transition-all"
-                  style={{
-                    borderColor:
-                      focused === "password"
-                        ? "var(--color-violet)"
-                        : "var(--color-border-medium)",
-                    boxShadow:
-                      focused === "password"
-                        ? "0 0 0 3px rgba(180,142,240,0.1)"
-                        : "none",
-                  }}
-                />
-              </div>
-
-              {/* BUTTON */}
-              <button
-                type="button"
-                className="w-full py-3 rounded-xl bg-violet text-bg-base text-sm font-medium tracking-widest uppercase hover:brightness-110 transition-all hover:-translate-y-px active:translate-y-0"
-              >
-                Sign In
-              </button>
-
-              {/* DIVIDER */}
-              <div className="flex items-center gap-4 py-2">
-                <div className="flex-1 h-px bg-border-subtle" />
-                <span className="text-text-muted text-xs tracking-widest uppercase">
-                  or continue with
-                </span>
-                <div className="flex-1 h-px bg-border-subtle" />
-              </div>
-
-              {/* GOOGLE */}
-              <button
-                type="button"
-                className="w-full py-3 rounded-xl bg-bg-surface border border-border-medium hover:border-violet/40 hover:bg-bg-card-hover transition-all flex items-center justify-center gap-3"
-              >
-                <span className="text-sm text-text-secondary">
-                  Continue with Google
-                </span>
-              </button>
-
+        {/* Media type tags */}
+        <div className="flex flex-col gap-3">
+          {[
+            { label: "Movies", color: "var(--color-rose)"   },
+            { label: "Series", color: "var(--color-teal)"   },
+            { label: "Books",  color: "var(--color-violet)" },
+            { label: "Games",  color: "var(--color-violet)" },
+          ].map((type) => (
+            <div key={type.label} className="flex items-center gap-3">
+              <div className="w-px h-4" style={{ background: type.color, opacity: 0.4 }} />
+              <span className="text-[0.65rem] tracking-[0.25em] uppercase text-text-muted">
+                {type.label}
+              </span>
             </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Right panel — form */}
+      <div className="flex-1 flex items-center justify-center px-6 py-16">
+        <div className="w-full max-w-sm animate-fade-up">
+
+          {/* Mobile logo */}
+          <div className="lg:hidden text-center mb-12">
+            <Link href="/" className="inline-flex items-center gap-1">
+              <span className="font-body font-light tracking-[0.3em] uppercase text-lg">ether</span>
+              <span className="w-1.5 h-1.5 rounded-full mb-3 ml-0.5"
+                style={{ background: "var(--color-mist)" }} />
+            </Link>
+          </div>
+
+          {/* Heading */}
+          <div className="mb-10">
+            <p className="text-[0.6rem] tracking-[0.4em] uppercase mb-3 font-medium"
+              style={{ color: "var(--color-mist)", opacity: 0.5 }}>
+              welcome back
+            </p>
+            <h1 className="font-display text-3xl font-black tracking-tight">
+              Sign in
+            </h1>
+          </div>
+
+          {/* Form */}
+          <div className="flex flex-col gap-6">
+
+            {/* Email */}
+            <div className="flex flex-col gap-2">
+              <label className="text-[0.6rem] tracking-[0.2em] uppercase text-text-muted font-medium">
+                Email
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onFocus={() => setFocused("email")}
+                onBlur={() => setFocused(null)}
+                placeholder="you@example.com"
+                className="w-full border rounded-xl px-4 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none"
+                style={inputStyle("email")}
+              />
+            </div>
+
+            {/* Password */}
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <label className="text-[0.6rem] tracking-[0.2em] uppercase text-text-muted font-medium">
+                  Password
+                </label>
+                <Link href="/forgot-password"
+                  className="text-[0.6rem] tracking-[0.15em] uppercase text-text-muted hover:text-mist transition-colors">
+                  Forgot?
+                </Link>
+              </div>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onFocus={() => setFocused("password")}
+                onBlur={() => setFocused(null)}
+                placeholder="••••••••"
+                className="w-full border rounded-xl px-4 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none"
+                style={inputStyle("password")}
+              />
+            </div>
+
+            {/* Submit */}
+            <button
+              type="button"
+              className="w-full py-3 rounded-xl text-xs tracking-[0.25em] uppercase font-medium transition-all hover:-translate-y-px hover:brightness-110"
+              style={{
+                background: "rgba(200,212,240,0.08)",
+                border: "1px solid rgba(200,212,240,0.15)",
+                color: "var(--color-mist)",
+              }}
+            >
+              Enter the Ether
+            </button>
+
+            {/* Divider */}
+            <div className="flex items-center gap-4">
+              <div className="flex-1 h-px" style={{ background: "var(--color-border-subtle)" }} />
+              <span className="text-[0.6rem] tracking-[0.2em] uppercase text-text-muted">or</span>
+              <div className="flex-1 h-px" style={{ background: "var(--color-border-subtle)" }} />
+            </div>
+
+            {/* Google */}
+            <button
+              type="button"
+              className="w-full py-3 rounded-xl text-xs tracking-[0.2em] uppercase text-text-muted transition-all hover:text-text-secondary"
+              style={{
+                border: "1px solid rgba(200,212,240,0.07)",
+                background: "rgba(255,255,255,0.02)",
+              }}
+            >
+              Continue with Google
+            </button>
+
+            {/* Register link */}
+            <p className="text-center text-xs text-text-muted">
+              No account?{" "}
+              <Link href="/register"
+                className="transition-colors hover:text-mist"
+                style={{ color: "var(--color-mist)", opacity: 0.7 }}>
+                Create one
+              </Link>
+            </p>
+
           </div>
         </div>
       </div>
+
     </div>
   );
 }

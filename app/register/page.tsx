@@ -5,66 +5,47 @@ import { useState, ChangeEvent } from "react";
 
 type FormState = {
   username: string;
-  email: string;
+  email:    string;
   password: string;
 };
 
 type Field = {
-  id: keyof FormState;
-  label: string;
-  type: string;
+  id:          keyof FormState;
+  label:       string;
+  type:        string;
   placeholder: string;
 };
 
-const stars = Array.from({ length: 60 }, (_, i) => ({
-  top: `${(i * 37.3) % 100}%`,
-  left: `${(i * 61.8) % 100}%`,
-  size: (i % 3) + 1,
+const fields: Field[] = [
+  { id: "username", label: "Username", type: "text",     placeholder: "cosmicwatcher" },
+  { id: "email",    label: "Email",    type: "email",    placeholder: "you@example.com" },
+  { id: "password", label: "Password", type: "password", placeholder: "••••••••" },
+];
+
+const stars = Array.from({ length: 50 }, (_, i) => ({
+  top:      `${(i * 37.3) % 100}%`,
+  left:     `${(i * 61.8) % 100}%`,
+  size:     (i % 3) + 1,
   duration: `${3 + (i % 5)}s`,
-  delay: `${(i * 0.37) % 5}s`,
+  delay:    `${(i * 0.37) % 5}s`,
 }));
 
 export default function RegisterPage() {
   const [focused, setFocused] = useState<keyof FormState | null>(null);
+  const [form, setForm]       = useState<FormState>({ username: "", email: "", password: "" });
 
-  const [form, setForm] = useState<FormState>({
-    username: "",
-    email: "",
-    password: "",
+  const update = (field: keyof FormState) => (e: ChangeEvent<HTMLInputElement>) =>
+    setForm((prev) => ({ ...prev, [field]: e.target.value }));
+
+  const inputStyle = (id: keyof FormState) => ({
+    borderColor: focused === id ? "rgba(200,212,240,0.3)" : "rgba(200,212,240,0.07)",
+    boxShadow:   focused === id ? "0 0 0 3px rgba(184,196,224,0.06)" : "none",
+    background:  "rgba(255,255,255,0.03)",
+    transition:  "border-color 0.2s ease, box-shadow 0.2s ease",
   });
 
-  const update =
-    (field: keyof FormState) =>
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setForm((prev) => ({
-        ...prev,
-        [field]: e.target.value,
-      }));
-    };
-
-  const fields: Field[] = [
-    {
-      id: "username",
-      label: "Username",
-      type: "text",
-      placeholder: "cosmicwatcher",
-    },
-    {
-      id: "email",
-      label: "Email",
-      type: "email",
-      placeholder: "you@example.com",
-    },
-    {
-      id: "password",
-      label: "Password",
-      type: "password",
-      placeholder: "••••••••",
-    },
-  ];
-
   return (
-    <div className="min-h-screen bg-bg-base text-text-primary flex items-center justify-center py-2 px-6 relative overflow-hidden">
+    <div className="min-h-screen bg-bg-base text-text-primary flex relative overflow-hidden">
 
       {/* Starfield */}
       <div className="fixed inset-0 pointer-events-none">
@@ -73,111 +54,159 @@ export default function RegisterPage() {
             key={i}
             className="star absolute rounded-full bg-white"
             style={{
-              top: s.top,
-              left: s.left,
-              width: s.size,
-              height: s.size,
+              top: s.top, left: s.left,
+              width: s.size, height: s.size,
               animationDuration: s.duration,
               animationDelay: s.delay,
             }}
           />
         ))}
-
-        <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-teal/7 blur-[130px]" />
-        <div className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full bg-violet/6 blur-[110px]" />
-        <div className="absolute top-[40%] left-[40%] w-[300px] h-[300px] rounded-full bg-rose/4 blur-[90px]" />
+        <div className="glow-orb-1 absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full blur-[130px]"
+          style={{ background: "rgba(142,212,212,0.06)" }} />
+        <div className="glow-orb-2 absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full blur-[110px]"
+          style={{ background: "rgba(184,174,240,0.06)" }} />
       </div>
 
-      {/* Card */}
-      <div className="relative z-10 w-full max-w-lg animate-fade-up">
+      {/* Right panel — decorative (flipped from login) */}
+      <div className="hidden lg:flex flex-col justify-between w-[45%] order-last relative px-16 py-14 border-l border-border-subtle">
 
         {/* Logo */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-baseline gap-0.5">
-            <span className="font-display italic text-5xl font-bold tracking-tight">
-              binge
+        <div className="flex justify-end">
+          <Link href="/" className="flex items-center gap-1 group">
+            <span className="font-body font-light tracking-[0.3em] uppercase text-lg text-text-primary">
+              ether
             </span>
-            <span className="font-display text-5xl font-black tracking-tight text-violet">
-              long
-            </span>
+            <span
+              className="w-1.5 h-1.5 rounded-full mb-3 ml-0.5 group-hover:scale-125 transition-transform"
+              style={{ background: "var(--color-mist)", boxShadow: "0 0 6px 2px rgba(200,212,240,0.3)" }}
+            />
           </Link>
-          <p className="text-text-muted text-xs tracking-[0.25em] uppercase mt-3">
-            Your universe awaits
+        </div>
+
+        {/* Quote */}
+        <div className="max-w-xs ml-auto text-right">
+          <p
+            className="font-display text-[2rem] font-black leading-[1.1] tracking-tight mb-6"
+          >
+            Your universe{" "}
+            <em className="not-italic" style={{ color: "var(--color-gold)" }}>begins</em>
+            {" "}here.
+          </p>
+          <p className="text-xs tracking-[0.25em] uppercase" style={{ color: "var(--color-mist)", opacity: 0.4 }}>
+            every story leaves a mark
           </p>
         </div>
 
-        <div className="bg-bg-card border border-border-subtle rounded-2xl px-4 py-4 relative overflow-hidden">
-
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-teal/40 to-transparent" />
-
-          <h1 className="font-display text-4xl font-bold mb-2 text-center">
-            Create account
-          </h1>
-
-          <p className="text-text-secondary text-base mb-10 text-center">
-            Already have an account?{" "}
-            <Link href="/login" className="text-violet hover:underline">
-              Sign in
-            </Link>
-          </p>
-
-          {/* INNER CONTAINER */}
-          <div className="px-2 sm:px-4 max-w-md mx-auto">
-
-            {/* FORM */}
-            <div className="flex flex-col gap-8">
-              {fields.map(({ id, label, type, placeholder }) => (
-                <div key={id} className="flex flex-col gap-2">
-                  <label className="text-xs tracking-[0.15em] uppercase text-text-muted font-medium">
-                    {label}
-                  </label>
-
-                  <input
-                    type={type}
-                    value={form[id]}
-                    onChange={update(id)}
-                    onFocus={() => setFocused(id)}
-                    onBlur={() => setFocused(null)}
-                    placeholder={placeholder}
-                    className="w-full bg-bg-surface border rounded-xl px-4 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none transition-all"
-                    style={{
-                      borderColor:
-                        focused === id
-                          ? "var(--color-violet)"
-                          : "var(--color-border-medium)",
-                      boxShadow:
-                        focused === id
-                          ? "0 0 0 3px rgba(180,142,240,0.1)"
-                          : "none",
-                    }}
-                  />
-                </div>
-              ))}
-
-              {/* TERMS */}
-              <p className="text-text-muted text-xs leading-relaxed">
-                By creating an account you agree to our{" "}
-                <Link href="/terms" className="text-violet hover:underline">
-                  Terms
-                </Link>{" "}
-                and{" "}
-                <Link href="/privacy" className="text-violet hover:underline">
-                  Privacy Policy
-                </Link>.
-              </p>
-
-              {/* BUTTON */}
-              <button
-                type="button"
-                className="w-full py-3 rounded-xl bg-violet text-bg-base text-sm font-medium tracking-widest uppercase hover:brightness-110 transition-all hover:-translate-y-px active:translate-y-0"
+        {/* Steps */}
+        <div className="flex flex-col gap-4 ml-auto text-right">
+          {[
+            { step: "01", label: "Create your account" },
+            { step: "02", label: "Log what you've experienced" },
+            { step: "03", label: "Watch your universe grow" },
+          ].map(({ step, label }) => (
+            <div key={step} className="flex items-center justify-end gap-3">
+              <span className="text-[0.65rem] tracking-[0.15em] uppercase text-text-muted">
+                {label}
+              </span>
+              <span
+                className="text-[0.6rem] font-medium tabular-nums"
+                style={{ color: "var(--color-mist)", opacity: 0.4 }}
               >
-                Create Account
-              </button>
+                {step}
+              </span>
             </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Left panel — form */}
+      <div className="flex-1 flex items-center justify-center px-6 py-16">
+        <div className="w-full max-w-sm animate-fade-up">
+
+          {/* Mobile logo */}
+          <div className="lg:hidden text-center mb-12">
+            <Link href="/" className="inline-flex items-center gap-1">
+              <span className="font-body font-light tracking-[0.3em] uppercase text-lg">ether</span>
+              <span className="w-1.5 h-1.5 rounded-full mb-3 ml-0.5"
+                style={{ background: "var(--color-mist)" }} />
+            </Link>
+          </div>
+
+          {/* Heading */}
+          <div className="mb-10">
+            <p className="text-[0.6rem] tracking-[0.4em] uppercase mb-3 font-medium"
+              style={{ color: "var(--color-mist)", opacity: 0.5 }}>
+              new arrival
+            </p>
+            <h1 className="font-display text-3xl font-black tracking-tight">
+              Create account
+            </h1>
+          </div>
+
+          {/* Form */}
+          <div className="flex flex-col gap-6">
+
+            {fields.map(({ id, label, type, placeholder }) => (
+              <div key={id} className="flex flex-col gap-2">
+                <label className="text-[0.6rem] tracking-[0.2em] uppercase text-text-muted font-medium">
+                  {label}
+                </label>
+                <input
+                  type={type}
+                  value={form[id]}
+                  onChange={update(id)}
+                  onFocus={() => setFocused(id)}
+                  onBlur={() => setFocused(null)}
+                  placeholder={placeholder}
+                  className="w-full border rounded-xl px-4 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none"
+                  style={inputStyle(id)}
+                />
+              </div>
+            ))}
+
+            {/* Terms */}
+            <p className="text-[0.65rem] text-text-muted leading-relaxed tracking-wide">
+              By continuing you agree to our{" "}
+              <Link href="/terms"
+                className="transition-colors hover:text-mist"
+                style={{ color: "var(--color-mist)", opacity: 0.7 }}>
+                Terms
+              </Link>{" "}
+              and{" "}
+              <Link href="/privacy"
+                className="transition-colors hover:text-mist"
+                style={{ color: "var(--color-mist)", opacity: 0.7 }}>
+                Privacy Policy
+              </Link>.
+            </p>
+
+            {/* Submit */}
+            <button
+              type="button"
+              className="w-full py-3 rounded-xl text-xs tracking-[0.25em] uppercase font-medium transition-all hover:-translate-y-px hover:brightness-110"
+              style={{
+                background: "rgba(200,212,240,0.08)",
+                border:     "1px solid rgba(200,212,240,0.15)",
+                color:      "var(--color-mist)",
+              }}
+            >
+              Enter the Ether
+            </button>
+
+            {/* Sign in link */}
+            <p className="text-center text-xs text-text-muted">
+              Already have an account?{" "}
+              <Link href="/login"
+                className="transition-colors hover:text-mist"
+                style={{ color: "var(--color-mist)", opacity: 0.7 }}>
+                Sign in
+              </Link>
+            </p>
 
           </div>
         </div>
       </div>
+
     </div>
   );
 }
