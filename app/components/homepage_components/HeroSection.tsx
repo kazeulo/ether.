@@ -255,7 +255,7 @@ export default function HeroSection() {
             Enter the Ether
           </Link>
           <Link
-            href="/register"
+            href="/explore"
             className="transition-colors"
             style={{
               fontSize: 10, letterSpacing: "0.22em",
