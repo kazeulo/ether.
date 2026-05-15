@@ -1,7 +1,5 @@
 import type { ReactNode } from "react";
 import Preloader from "./components/Preloader";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
 import "./globals.css";
 
 import { Montserrat, Poppins, Playfair_Display } from "next/font/google";
@@ -28,9 +26,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <body>
         <Preloader />
-        <Header />
+        {/* <Header /> */}
         {children}
-        <Footer />
+        {/* <Footer /> */}
       </body>
     </html>
   );
