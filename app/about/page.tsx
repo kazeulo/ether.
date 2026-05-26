@@ -72,7 +72,7 @@ export default function AboutPage() {
       style={{ background: "var(--color-bg-base)", color: "var(--color-text-primary)", fontFamily: "var(--font-body)", fontWeight: 300 }}
     >
 
-      {/* ── Background ─────────────────────────────────────── */}
+      {/* Background */}
       <div className="fixed inset-0 pointer-events-none z-0">
         {stars.map((s, i) => (
           <span
@@ -91,7 +91,7 @@ export default function AboutPage() {
         />
       </div>
 
-      {/* ── HERO ───────────────────────────────────────────── */}
+      {/* HERO */}
       <section className="relative z-10 max-w-4xl mx-auto px-6 pt-32 pb-20 flex flex-col items-center text-center">
         <Label centered>about ether</Label>
         <h1
@@ -114,12 +114,12 @@ export default function AboutPage() {
         </p>
       </section>
 
-      {/* ── DIVIDER ────────────────────────────────────────── */}
+      {/* DIVIDER */}
       <div className="relative z-10 max-w-4xl mx-auto px-6">
         <div style={{ height: "0.5px", background: "var(--color-border-subtle)" }} />
       </div>
 
-      {/* ── VALUES ─────────────────────────────────────────── */}
+      {/* VALUES */}
       <section className="relative z-10 max-w-4xl mx-auto px-6 py-20">
         <Label>what we believe</Label>
         <div
@@ -168,12 +168,12 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── DIVIDER ────────────────────────────────────────── */}
+      {/* DIVIDER */}
       <div className="relative z-10 max-w-4xl mx-auto px-6">
         <div style={{ height: "0.5px", background: "var(--color-border-subtle)" }} />
       </div>
 
-      {/* ── ORIGIN ─────────────────────────────────────────── */}
+      {/* ORIGIN */}
       <section className="relative z-10 max-w-4xl mx-auto px-6 py-20">
         <div className="grid lg:grid-cols-[1fr_2fr] gap-16 items-start">
 
@@ -228,61 +228,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
-      {/* ── DIVIDER ────────────────────────────────────────── */}
-      <div className="relative z-10 max-w-4xl mx-auto px-6">
-        <div style={{ height: "0.5px", background: "var(--color-border-subtle)" }} />
-      </div>
-
-      {/* ── CTA ────────────────────────────────────────────── */}
-      <section className="relative z-10 max-w-4xl mx-auto px-6 py-16 pb-32">
-        <div
-          className="relative text-center"
-          style={{
-            padding: "4rem 3rem",
-            border: "0.5px solid var(--color-border-medium)",
-          }}
-        >
-          {/* gradient top edge */}
-          <div style={{ position: "absolute", inset: "0 0 auto 0", height: "0.5px", background: "linear-gradient(to right, transparent, rgba(200,212,240,0.22), transparent)" }} />
-
-          {/* corner ticks */}
-          {(["tl","tr","bl","br"] as const).map((p) => <CornerTick key={p} pos={p} />)}
-
-          <Label centered>ready?</Label>
-          <h2
-            style={{
-              fontFamily: "var(--font-logo)",
-              fontSize: "clamp(1.6rem, 3vw, 2.4rem)",
-              fontWeight: 400, fontStyle: "italic",
-              marginBottom: "1rem",
-            }}
-          >
-            Your universe is{" "}
-            <em style={{ fontStyle: "normal", color: "var(--color-gold)" }}>waiting</em>.
-          </h2>
-          <p style={{ fontSize: 12, color: "var(--color-text-secondary)", lineHeight: 1.9, maxWidth: 300, margin: "0 auto 2.5rem" }}>
-            Free forever. No credit card. Just you and every story you've ever lived.
-          </p>
-          <Link
-            href="/register"
-            style={{
-              display: "inline-block",
-              padding: "0.65rem 2rem",
-              fontSize: 10, letterSpacing: "0.28em",
-              textTransform: "uppercase",
-              color: "var(--color-mist)",
-              background: "rgba(200,212,240,0.07)",
-              border: "0.5px solid var(--color-border-medium)",
-              fontWeight: 400,
-              transition: "background 0.25s, border-color 0.25s",
-            }}
-          >
-            Enter the Ether — Free
-          </Link>
-        </div>
-      </section>
-
     </div>
   );
 }

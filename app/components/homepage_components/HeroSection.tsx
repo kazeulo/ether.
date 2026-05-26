@@ -16,13 +16,6 @@ const marqueeItems = [
   "Kokoro", "Nier: Automata", "Shogun", "The Master and Margarita",
 ];
 
-// Add this to globals.css @layer utilities:
-// @keyframes marquee {
-//   from { transform: translateX(0); }
-//   to   { transform: translateX(-50%); }
-// }
-// .animate-marquee { animation: marquee 26s linear infinite; }
-
 function Stars() {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -121,46 +114,6 @@ export default function HeroSection() {
       {/* Corner ticks */}
       {(["tl", "tr", "bl", "br"] as const).map((p) => <CornerMark key={p} pos={p} />)}
 
-      {/* Side ambient stats */}
-      <div
-        className="absolute right-8 top-1/2 -translate-y-1/2 z-[5] text-right
-                   animate-fade-up [animation-delay:1000ms] opacity-0"
-        style={{ animationFillMode: "forwards" }}
-      >
-        <span className="block" style={{ fontFamily: "var(--font-logo)", fontSize: 40, fontWeight: 400, color: "var(--color-text-muted)", lineHeight: 1 }}>
-          247
-        </span>
-        <span className="block mt-1" style={{ fontSize: 8, letterSpacing: "0.28em", textTransform: "uppercase", color: "var(--color-text-muted)", opacity: 0.55 }}>
-          worlds held
-        </span>
-      </div>
-
-      {/* About — vertical film-spine label, left edge */}
-      <Link
-        href="/about"
-        className="absolute left-8 top-1/2 -translate-y-1/2 z-[5]
-                   animate-fade-up [animation-delay:1100ms] opacity-0
-                   group flex flex-col items-center gap-3"
-        style={{ animationFillMode: "forwards", textDecoration: "none" }}
-      >
-        {/* top tick */}
-        <span style={{ display: "block", width: "0.5px", height: 32, background: "var(--color-border-medium)", transition: "height 0.4s ease" }} className="group-hover:h-10" />
-        {/* rotated text */}
-        <span
-          style={{
-            fontSize: 9, letterSpacing: "0.32em", textTransform: "uppercase",
-            color: "var(--color-text-muted)", fontWeight: 400,
-            writingMode: "vertical-rl", transform: "rotate(180deg)",
-            transition: "color 0.3s ease",
-          }}
-          className="group-hover:text-[var(--color-mist)]"
-        >
-          about this world
-        </span>
-        {/* bottom tick */}
-        <span style={{ display: "block", width: "0.5px", height: 32, background: "var(--color-border-medium)" }} />
-      </Link>
-
       {/* Main content */}
       <div className="relative z-[5] flex flex-col items-center text-center px-6 max-w-2xl w-full">
 
@@ -255,7 +208,7 @@ export default function HeroSection() {
             Enter the Ether
           </Link>
           <Link
-            href="/explore"
+            href="/about"
             className="transition-colors"
             style={{
               fontSize: 10, letterSpacing: "0.22em",
@@ -263,7 +216,7 @@ export default function HeroSection() {
               color: "var(--color-text-muted)", fontWeight: 400,
             }}
           >
-            Explore →
+            About
           </Link>
 
         </div>
