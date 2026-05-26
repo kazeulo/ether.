@@ -4,16 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
-
-// Constants 
-
-const stars = Array.from({ length: 50 }, (_, i) => ({
-  top:      `${(i * 37.3) % 100}%`,
-  left:     `${(i * 61.8) % 100}%`,
-  size:     (i % 3) + 1,
-  duration: `${3 + (i % 5)}s`,
-  delay:    `${(i * 0.37) % 5}s`,
-}));
+import { stars } from "@/designs/Stars";
 
 // Component
 
@@ -61,7 +52,6 @@ export default function LoginPage() {
   };
 
   // Google OAuth 
-
   const handleGoogle = async () => {
     setError(null);
 

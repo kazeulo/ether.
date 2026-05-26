@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
+import { stars } from "@/designs/Stars";
 
 // Types
 
@@ -27,14 +28,6 @@ const fields: Field[] = [
   { id: "email",    label: "Email",    type: "email",    placeholder: "you@example.com" },
   { id: "password", label: "Password", type: "password", placeholder: "••••••••" },
 ];
-
-const stars = Array.from({ length: 50 }, (_, i) => ({
-  top:      `${(i * 37.3) % 100}%`,
-  left:     `${(i * 61.8) % 100}%`,
-  size:     (i % 3) + 1,
-  duration: `${3 + (i % 5)}s`,
-  delay:    `${(i * 0.37) % 5}s`,
-}));
 
 // Component 
 export default function RegisterPage() {
@@ -74,8 +67,8 @@ export default function RegisterPage() {
       return;
     }
 
-    // If email confirmation is disabled in Supabase → go straight to dashboard
-    // If email confirmation is enabled  → redirect to a verify-email page
+    // If email confirmation is disabled in Supabase, go straight to dashboard
+    // If email confirmation is enabled, redirect to a verify-email page
     router.push("/dashboard");
   };
 
