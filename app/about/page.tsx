@@ -93,7 +93,6 @@ export default function AboutPage() {
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          // style={{ transform: "translateX(-0.5px)" }}
         >
           <path d="M19 12H5" />
           <path d="M12 19l-7-7 7-7" />
@@ -222,9 +221,9 @@ export default function AboutPage() {
 
           <div className="flex flex-col gap-6">
             {[
-              "Ether began as a personal spreadsheet — a quiet habit of writing down every film, book, and game that left a mark. Over time it became clear that the act of logging wasn't about organisation. It was about memory. About holding onto the feeling a story gives you before it fades.",
+              "Ether began as a personal spreadsheet — a quiet habit of writing down every film, book, game, or any type of media that left a mark. Over time it became clear that the act of logging wasn't about organization. It was about memory. About holding onto the feeling a story gives you before it fades.",
               "I built Ether because that feeling deserves a home. Something as atmospheric as the stories themselves. Not clinical, not social — just a place where your media life can breathe.",
-              "The name comes from the ancient idea of ether — the invisible substance that fills the space between stars. That's where your stories live. In the space between moments, always there when you reach for them.",
+              "The name comes from the ancient idea of ether — the invisible substance that fills the space between stars. That's where I believe my stories live, where every stories live. In the space between moments, always there when you reach for them.",
             ].map((para, i) => (
               <p
                 key={i}
