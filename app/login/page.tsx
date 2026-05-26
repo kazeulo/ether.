@@ -2,6 +2,10 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/utils/supabase/client";
+
+// Constants 
 
 const stars = Array.from({ length: 50 }, (_, i) => ({
   top:      `${(i * 37.3) % 100}%`,
@@ -11,21 +15,70 @@ const stars = Array.from({ length: 50 }, (_, i) => ({
   delay:    `${(i * 0.37) % 5}s`,
 }));
 
+// Component
+
 export default function LoginPage() {
+  const router   = useRouter();
+  const supabase = createClient();
+
   const [email, setEmail]       = useState("");
   const [password, setPassword] = useState("");
   const [focused, setFocused]   = useState<string | null>(null);
+  const [error, setError]       = useState<string | null>(null);
+  const [loading, setLoading]   = useState(false);
 
-  const inputStyle = (field: string) => ({
-    borderColor: focused === field
-      ? "rgba(200,212,240,0.3)"
-      : "rgba(200,212,240,0.07)",
-    boxShadow: focused === field
-      ? "0 0 0 3px rgba(184,196,224,0.06)"
-      : "none",
-    background: "rgba(255,255,255,0.03)",
-    transition: "border-color 0.2s ease, box-shadow 0.2s ease",
+  const inputStyle = (field: string): React.CSSProperties => ({
+    borderColor: focused === field ? "rgba(200,212,240,0.3)" : "rgba(200,212,240,0.07)",
+    boxShadow:   focused === field ? "0 0 0 3px rgba(184,196,224,0.06)" : "none",
+    background:  "rgba(255,255,255,0.03)",
+    transition:  "border-color 0.2s ease, box-shadow 0.2s ease",
   });
+
+  // Email / password login 
+
+  const handleLogin = async () => {
+    setError(null);
+
+    if (!email.trim())    { setError("Email is required.");    return; }
+    if (!password.trim()) { setError("Password is required."); return; }
+
+    setLoading(true);
+
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    setLoading(false);
+
+    if (signInError) {
+      // Supabase returns "Invalid login credentials" for wrong email/password
+      setError(signInError.message);
+      return;
+    }
+
+    router.push("/dashboard");
+  };
+
+  // Google OAuth 
+
+  const handleGoogle = async () => {
+    setError(null);
+
+    const { error: oauthError } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`, // must match Supabase allowed URLs
+      },
+    });
+
+    if (oauthError) {
+      setError(oauthError.message);
+    }
+    // On success Supabase redirects the browser automatically — no router.push needed
+  };
+
+  // Render 
 
   return (
     <div className="min-h-screen bg-bg-base text-text-primary flex relative overflow-hidden">
@@ -37,17 +90,23 @@ export default function LoginPage() {
             key={i}
             className="star absolute rounded-full bg-white"
             style={{
-              top: s.top, left: s.left,
-              width: s.size, height: s.size,
+              top:               s.top,
+              left:              s.left,
+              width:             s.size,
+              height:            s.size,
               animationDuration: s.duration,
-              animationDelay: s.delay,
+              animationDelay:    s.delay,
             }}
           />
         ))}
-        <div className="glow-orb-1 absolute top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full blur-[130px]"
-          style={{ background: "rgba(184,174,240,0.07)" }} />
-        <div className="glow-orb-2 absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full blur-[110px]"
-          style={{ background: "rgba(142,212,212,0.05)" }} />
+        <div
+          className="glow-orb-1 absolute top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full blur-[130px]"
+          style={{ background: "rgba(184,174,240,0.07)" }}
+        />
+        <div
+          className="glow-orb-2 absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full blur-[110px]"
+          style={{ background: "rgba(142,212,212,0.05)" }}
+        />
       </div>
 
       {/* Left panel — decorative */}
@@ -106,15 +165,19 @@ export default function LoginPage() {
           <div className="lg:hidden text-center mb-12">
             <Link href="/" className="inline-flex items-center gap-1">
               <span className="font-body font-light tracking-[0.3em] uppercase text-lg">ether</span>
-              <span className="w-1.5 h-1.5 rounded-full mb-3 ml-0.5"
-                style={{ background: "var(--color-mist)" }} />
+              <span
+                className="w-1.5 h-1.5 rounded-full mb-3 ml-0.5"
+                style={{ background: "var(--color-mist)" }}
+              />
             </Link>
           </div>
 
           {/* Heading */}
           <div className="mb-10">
-            <p className="text-[0.6rem] tracking-[0.4em] uppercase mb-3 font-medium"
-              style={{ color: "var(--color-mist)", opacity: 0.5 }}>
+            <p
+              className="text-[0.6rem] tracking-[0.4em] uppercase mb-3 font-medium"
+              style={{ color: "var(--color-mist)", opacity: 0.5 }}
+            >
               welcome back
             </p>
             <h1 className="font-display text-3xl font-black tracking-tight">
@@ -137,7 +200,8 @@ export default function LoginPage() {
                 onFocus={() => setFocused("email")}
                 onBlur={() => setFocused(null)}
                 placeholder="you@example.com"
-                className="w-full border rounded-xl px-4 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none"
+                disabled={loading}
+                className="w-full border rounded-xl px-4 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none disabled:opacity-50"
                 style={inputStyle("email")}
               />
             </div>
@@ -148,8 +212,10 @@ export default function LoginPage() {
                 <label className="text-[0.6rem] tracking-[0.2em] uppercase text-text-muted font-medium">
                   Password
                 </label>
-                <Link href="/forgot-password"
-                  className="text-[0.6rem] tracking-[0.15em] uppercase text-text-muted hover:text-mist transition-colors">
+                <Link
+                  href="/forgot-password"
+                  className="text-[0.6rem] tracking-[0.15em] uppercase text-text-muted hover:text-mist transition-colors"
+                >
                   Forgot?
                 </Link>
               </div>
@@ -160,22 +226,39 @@ export default function LoginPage() {
                 onFocus={() => setFocused("password")}
                 onBlur={() => setFocused(null)}
                 placeholder="••••••••"
-                className="w-full border rounded-xl px-4 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none"
+                disabled={loading}
+                className="w-full border rounded-xl px-4 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none disabled:opacity-50"
                 style={inputStyle("password")}
               />
             </div>
 
+            {/* Error message */}
+            {error && (
+              <p
+                className="text-[0.7rem] tracking-wide leading-relaxed px-4 py-3 rounded-lg"
+                style={{
+                  color:      "rgba(255,100,100,0.9)",
+                  background: "rgba(255,80,80,0.06)",
+                  border:     "1px solid rgba(255,80,80,0.12)",
+                }}
+              >
+                {error}
+              </p>
+            )}
+
             {/* Submit */}
             <button
               type="button"
-              className="w-full py-3 rounded-xl text-xs tracking-[0.25em] uppercase font-medium transition-all hover:-translate-y-px hover:brightness-110"
+              onClick={handleLogin}
+              disabled={loading}
+              className="w-full py-3 rounded-xl text-xs tracking-[0.25em] uppercase font-medium transition-all hover:-translate-y-px hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:brightness-100"
               style={{
                 background: "rgba(200,212,240,0.08)",
-                border: "1px solid rgba(200,212,240,0.15)",
-                color: "var(--color-mist)",
+                border:     "1px solid rgba(200,212,240,0.15)",
+                color:      "var(--color-mist)",
               }}
             >
-              Enter the Ether
+              {loading ? "Signing in…" : "Enter the Ether"}
             </button>
 
             {/* Divider */}
@@ -185,12 +268,14 @@ export default function LoginPage() {
               <div className="flex-1 h-px" style={{ background: "var(--color-border-subtle)" }} />
             </div>
 
-            {/* Google */}
+            {/* Google OAuth */}
             <button
               type="button"
-              className="w-full py-3 rounded-xl text-xs tracking-[0.2em] uppercase text-text-muted transition-all hover:text-text-secondary"
+              onClick={handleGoogle}
+              disabled={loading}
+              className="w-full py-3 rounded-xl text-xs tracking-[0.2em] uppercase text-text-muted transition-all hover:text-text-secondary disabled:opacity-50 disabled:cursor-not-allowed"
               style={{
-                border: "1px solid rgba(200,212,240,0.07)",
+                border:     "1px solid rgba(200,212,240,0.07)",
                 background: "rgba(255,255,255,0.02)",
               }}
             >
@@ -200,9 +285,11 @@ export default function LoginPage() {
             {/* Register link */}
             <p className="text-center text-xs text-text-muted">
               No account?{" "}
-              <Link href="/register"
+              <Link
+                href="/register"
                 className="transition-colors hover:text-mist"
-                style={{ color: "var(--color-mist)", opacity: 0.7 }}>
+                style={{ color: "var(--color-mist)", opacity: 0.7 }}
+              >
                 Create one
               </Link>
             </p>

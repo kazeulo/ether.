@@ -2,6 +2,10 @@
 
 import Link from "next/link";
 import { useState, ChangeEvent } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/utils/supabase/client";
+
+// Types
 
 type FormState = {
   username: string;
@@ -15,6 +19,8 @@ type Field = {
   type:        string;
   placeholder: string;
 };
+
+// Constants
 
 const fields: Field[] = [
   { id: "username", label: "Username", type: "text",     placeholder: "cosmicwatcher" },
@@ -30,14 +36,50 @@ const stars = Array.from({ length: 50 }, (_, i) => ({
   delay:    `${(i * 0.37) % 5}s`,
 }));
 
+// Component 
 export default function RegisterPage() {
+  const router   = useRouter();
+  const supabase = createClient();
+
   const [focused, setFocused] = useState<keyof FormState | null>(null);
   const [form, setForm]       = useState<FormState>({ username: "", email: "", password: "" });
+  const [error, setError]     = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const update = (field: keyof FormState) => (e: ChangeEvent<HTMLInputElement>) =>
     setForm((prev) => ({ ...prev, [field]: e.target.value }));
 
-  const inputStyle = (id: keyof FormState) => ({
+  const handleRegister = async () => {
+    setError(null);
+
+    // Basic client-side validation
+    if (!form.username.trim()) { setError("Username is required."); return; }
+    if (!form.email.trim())    { setError("Email is required.");    return; }
+    if (form.password.length < 6) { setError("Password must be at least 6 characters."); return; }
+
+    setLoading(true);
+
+    const { error: signUpError } = await supabase.auth.signUp({
+      email:    form.email,
+      password: form.password,
+      options: {
+        data: { username: form.username }, // stored in user_metadata
+      },
+    });
+
+    setLoading(false);
+
+    if (signUpError) {
+      setError(signUpError.message);
+      return;
+    }
+
+    // If email confirmation is disabled in Supabase → go straight to dashboard
+    // If email confirmation is enabled  → redirect to a verify-email page
+    router.push("/dashboard");
+  };
+
+  const inputStyle = (id: keyof FormState): React.CSSProperties => ({
     borderColor: focused === id ? "rgba(200,212,240,0.3)" : "rgba(200,212,240,0.07)",
     boxShadow:   focused === id ? "0 0 0 3px rgba(184,196,224,0.06)" : "none",
     background:  "rgba(255,255,255,0.03)",
@@ -54,20 +96,26 @@ export default function RegisterPage() {
             key={i}
             className="star absolute rounded-full bg-white"
             style={{
-              top: s.top, left: s.left,
-              width: s.size, height: s.size,
+              top:               s.top,
+              left:              s.left,
+              width:             s.size,
+              height:            s.size,
               animationDuration: s.duration,
-              animationDelay: s.delay,
+              animationDelay:    s.delay,
             }}
           />
         ))}
-        <div className="glow-orb-1 absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full blur-[130px]"
-          style={{ background: "rgba(142,212,212,0.06)" }} />
-        <div className="glow-orb-2 absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full blur-[110px]"
-          style={{ background: "rgba(184,174,240,0.06)" }} />
+        <div
+          className="glow-orb-1 absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full blur-[130px]"
+          style={{ background: "rgba(142,212,212,0.06)" }}
+        />
+        <div
+          className="glow-orb-2 absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full blur-[110px]"
+          style={{ background: "rgba(184,174,240,0.06)" }}
+        />
       </div>
 
-      {/* Right panel — decorative (flipped from login) */}
+      {/* Right panel — decorative */}
       <div className="hidden lg:flex flex-col justify-between w-[45%] order-last relative px-16 py-14 border-l border-border-subtle">
 
         {/* Logo */}
@@ -85,9 +133,7 @@ export default function RegisterPage() {
 
         {/* Quote */}
         <div className="max-w-xs ml-auto text-right">
-          <p
-            className="font-display text-[2rem] font-black leading-[1.1] tracking-tight mb-6"
-          >
+          <p className="font-display text-[2rem] font-black leading-[1.1] tracking-tight mb-6">
             Your universe{" "}
             <em className="not-italic" style={{ color: "var(--color-gold)" }}>begins</em>
             {" "}here.
@@ -127,15 +173,19 @@ export default function RegisterPage() {
           <div className="lg:hidden text-center mb-12">
             <Link href="/" className="inline-flex items-center gap-1">
               <span className="font-body font-light tracking-[0.3em] uppercase text-lg">ether</span>
-              <span className="w-1.5 h-1.5 rounded-full mb-3 ml-0.5"
-                style={{ background: "var(--color-mist)" }} />
+              <span
+                className="w-1.5 h-1.5 rounded-full mb-3 ml-0.5"
+                style={{ background: "var(--color-mist)" }}
+              />
             </Link>
           </div>
 
           {/* Heading */}
           <div className="mb-10">
-            <p className="text-[0.6rem] tracking-[0.4em] uppercase mb-3 font-medium"
-              style={{ color: "var(--color-mist)", opacity: 0.5 }}>
+            <p
+              className="text-[0.6rem] tracking-[0.4em] uppercase mb-3 font-medium"
+              style={{ color: "var(--color-mist)", opacity: 0.5 }}
+            >
               new arrival
             </p>
             <h1 className="font-display text-3xl font-black tracking-tight">
@@ -158,24 +208,43 @@ export default function RegisterPage() {
                   onFocus={() => setFocused(id)}
                   onBlur={() => setFocused(null)}
                   placeholder={placeholder}
-                  className="w-full border rounded-xl px-4 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none"
+                  disabled={loading}
+                  className="w-full border rounded-xl px-4 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none disabled:opacity-50"
                   style={inputStyle(id)}
                 />
               </div>
             ))}
 
+            {/* Error message */}
+            {error && (
+              <p
+                className="text-[0.7rem] tracking-wide leading-relaxed px-4 py-3 rounded-lg"
+                style={{
+                  color:      "rgba(255,100,100,0.9)",
+                  background: "rgba(255,80,80,0.06)",
+                  border:     "1px solid rgba(255,80,80,0.12)",
+                }}
+              >
+                {error}
+              </p>
+            )}
+
             {/* Terms */}
             <p className="text-[0.65rem] text-text-muted leading-relaxed tracking-wide">
               By continuing you agree to our{" "}
-              <Link href="/terms"
+              <Link
+                href="/terms"
                 className="transition-colors hover:text-mist"
-                style={{ color: "var(--color-mist)", opacity: 0.7 }}>
+                style={{ color: "var(--color-mist)", opacity: 0.7 }}
+              >
                 Terms
               </Link>{" "}
               and{" "}
-              <Link href="/privacy"
+              <Link
+                href="/privacy"
                 className="transition-colors hover:text-mist"
-                style={{ color: "var(--color-mist)", opacity: 0.7 }}>
+                style={{ color: "var(--color-mist)", opacity: 0.7 }}
+              >
                 Privacy Policy
               </Link>.
             </p>
@@ -183,22 +252,26 @@ export default function RegisterPage() {
             {/* Submit */}
             <button
               type="button"
-              className="w-full py-3 rounded-xl text-xs tracking-[0.25em] uppercase font-medium transition-all hover:-translate-y-px hover:brightness-110"
+              onClick={handleRegister}
+              disabled={loading}
+              className="w-full py-3 rounded-xl text-xs tracking-[0.25em] uppercase font-medium transition-all hover:-translate-y-px hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:brightness-100"
               style={{
                 background: "rgba(200,212,240,0.08)",
                 border:     "1px solid rgba(200,212,240,0.15)",
                 color:      "var(--color-mist)",
               }}
             >
-              Enter the Ether
+              {loading ? "Creating account…" : "Enter the Ether"}
             </button>
 
             {/* Sign in link */}
             <p className="text-center text-xs text-text-muted">
               Already have an account?{" "}
-              <Link href="/login"
+              <Link
+                href="/login"
                 className="transition-colors hover:text-mist"
-                style={{ color: "var(--color-mist)", opacity: 0.7 }}>
+                style={{ color: "var(--color-mist)", opacity: 0.7 }}
+              >
                 Sign in
               </Link>
             </p>
