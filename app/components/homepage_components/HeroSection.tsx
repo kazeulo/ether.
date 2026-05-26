@@ -193,7 +193,7 @@ export default function HeroSection() {
           style={{ animationFillMode: "forwards" }}
         >
           <Link
-            href="/register"
+            href="/auth/register"
             className="transition-all hover:brightness-110"
             style={{
               padding: "0.65rem 1.9rem",
