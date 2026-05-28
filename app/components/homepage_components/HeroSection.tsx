@@ -67,7 +67,7 @@ export default function HeroSection() {
       {/* Stars */}
       <Stars />
 
-      {/* Glow orbs — keyframes from globals.css */}
+      {/* Glow orbs */}
       <div className="absolute inset-0 pointer-events-none z-[1]">
         <div
           className="absolute rounded-full glow-orb-1"
@@ -113,6 +113,53 @@ export default function HeroSection() {
 
       {/* Corner ticks */}
       {(["tl", "tr", "bl", "br"] as const).map((p) => <CornerMark key={p} pos={p} />)}
+
+      {/* Top nav — sign in / register */}
+      <div
+        className="absolute top-0 left-0 right-0 z-[6] flex items-center justify-between px-10"
+        style={{ height: 32 }}
+      >
+        {/* Left: wordmark hint */}
+        <span
+          style={{
+            fontSize: 9, letterSpacing: "0.36em",
+            textTransform: "uppercase",
+            color: "var(--color-text-muted)", opacity: 0.4,
+            fontWeight: 400,
+          }}
+        >
+          ether
+        </span>
+
+        {/* Right: auth links */}
+        <div className="flex items-center" style={{ gap: "0.1rem" }}>
+          <Link
+            href="/auth/login"
+            className="transition-colors hover:opacity-100"
+            style={{
+              fontSize: 9, letterSpacing: "0.28em",
+              textTransform: "uppercase", fontWeight: 400,
+              color: "var(--color-text-muted)", opacity: 0.55,
+              padding: "0.3rem 0.9rem",
+            }}
+          >
+            Sign in
+          </Link>
+          <span style={{ width: "0.5px", height: 10, background: "var(--color-border-subtle)", display: "block", opacity: 0.6 }} />
+          <Link
+            href="/auth/register"
+            className="transition-colors hover:opacity-100"
+            style={{
+              fontSize: 9, letterSpacing: "0.28em",
+              textTransform: "uppercase", fontWeight: 400,
+              color: "var(--color-mist)", opacity: 0.7,
+              padding: "0.3rem 0.9rem",
+            }}
+          >
+            Register
+          </Link>
+        </div>
+      </div>
 
       {/* Main content */}
       <div className="relative z-[5] flex flex-col items-center text-center px-6 max-w-2xl w-full">
@@ -218,12 +265,10 @@ export default function HeroSection() {
           >
             About
           </Link>
-
         </div>
       </div>
 
       {/* Scrolling marquee */}
-      {/* Add to globals.css: @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} } */}
       <div
         className="absolute left-0 right-0 z-[4] overflow-hidden"
         style={{ bottom: 44, borderTop: "0.5px solid var(--color-border-subtle)", paddingTop: 10 }}

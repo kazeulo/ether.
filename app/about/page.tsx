@@ -134,66 +134,17 @@ export default function AboutPage() {
           <em style={{ fontStyle: "normal", color: "var(--color-mist)" }}>feel</em>
           <br />their media.
         </h1>
-        <p style={{ fontSize: 13, color: "var(--color-text-secondary)", lineHeight: 1.9, maxWidth: 420, letterSpacing: "0.02em" }}>
+        {/* <p style={{ fontSize: 13, color: "var(--color-text-secondary)", lineHeight: 1.9, maxWidth: 420, letterSpacing: "0.02em" }}>
           Ether started as a simple question — why is there no beautiful, honest place to
           remember everything you've watched, read, and played? Not a social network.
           Not a recommendation engine. Just yours.
-        </p>
+        </p> */}
       </section>
 
       {/* DIVIDER */}
       <div className="relative z-10 max-w-4xl mx-auto px-6">
         <div style={{ height: "0.5px", background: "var(--color-border-subtle)" }} />
       </div>
-
-      {/* VALUES */}
-      <section className="relative z-10 max-w-4xl mx-auto px-6 py-20">
-        <Label>what we believe</Label>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            border: "0.5px solid var(--color-border-subtle)",
-          }}
-        >
-          {values.map(({ num, word, color, desc }, i) => (
-            <div
-              key={word}
-              className="relative"
-              style={{
-                padding: "2.5rem",
-                borderRight: i % 2 === 0 ? "0.5px solid var(--color-border-subtle)" : "none",
-                borderBottom: i < 2 ? "0.5px solid var(--color-border-subtle)" : "none",
-              }}
-            >
-              <span
-                style={{
-                  position: "absolute", top: "1.8rem", right: "2rem",
-                  fontFamily: "var(--font-logo)", fontSize: 11,
-                  color: "var(--color-text-muted)", letterSpacing: "0.12em", opacity: 0.5,
-                }}
-              >
-                {num}
-              </span>
-              <span
-                style={{
-                  display: "block",
-                  fontFamily: "var(--font-logo)",
-                  fontSize: "clamp(1.4rem, 2.5vw, 1.9rem)",
-                  fontWeight: 400, fontStyle: "italic",
-                  lineHeight: 1, marginBottom: "0.9rem",
-                  color,
-                }}
-              >
-                {word}
-              </span>
-              <p style={{ fontSize: 12, color: "var(--color-text-secondary)", lineHeight: 1.85, letterSpacing: "0.02em" }}>
-                {desc}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
 
       {/* DIVIDER */}
       <div className="relative z-10 max-w-4xl mx-auto px-6">
