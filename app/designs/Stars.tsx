@@ -1,4 +1,3 @@
-// Constants 
 export const stars = Array.from({ length: 50 }, (_, i) => ({
   top:      `${(i * 37.3) % 100}%`,
   left:     `${(i * 61.8) % 100}%`,

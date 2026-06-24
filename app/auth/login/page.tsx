@@ -281,7 +281,7 @@ export default function LoginPage() {
             <p className="text-center text-xs text-text-muted">
               No account?{" "}
               <Link
-                href="/register"
+                href="/auth/register"
                 className="transition-colors hover:text-mist"
                 style={{ color: "var(--color-mist)", opacity: 0.7 }}
               >
