@@ -8,7 +8,7 @@ export default function BackButton({ href = "/" }: BackButtonProps) {
   return (
     <Link
       href={href}
-      className="top-14 left-16 z-10 flex items-center justify-center w-9 h-9 rounded-full transition-all hover:-translate-x-0.5 hover:brightness-125"
+      className="flex items-center justify-center w-9 h-9 rounded-full transition-all hover:-translate-x-0.5 hover:brightness-125"
       style={{
         background: "rgba(200,212,240,0.05)",
         border:     "1px solid rgba(200,212,240,0.1)",

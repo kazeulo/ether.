@@ -1,4 +1,4 @@
-import Link from "next/link";
+import BackButton from "@/ui/BackButton";
 
 const stars = Array.from({ length: 50 }, (_, i) => ({
   top:      `${(i * 37.3) % 100}%`,
@@ -7,33 +7,6 @@ const stars = Array.from({ length: 50 }, (_, i) => ({
   duration: `${3 + (i % 5)}s`,
   delay:    `${(i * 0.37) % 5}s`,
 }));
-
-const values = [
-  {
-    num: "01",
-    word: "Atmospheric",
-    color: "var(--color-mist)",
-    desc: "Ether isn't a database. It's a feeling — the quiet weight of every story you've carried.",
-  },
-  {
-    num: "02",
-    word: "Personal",
-    color: "var(--color-gold)",
-    desc: "Your universe is yours alone. No algorithms, no feeds, no noise. Just you and what you've lived.",
-  },
-  {
-    num: "03",
-    word: "Universal",
-    color: "var(--color-teal)",
-    desc: "Movies, series, books, games — every medium is a world. Ether holds all of them equally.",
-  },
-  {
-    num: "04",
-    word: "Timeless",
-    color: "var(--color-violet)",
-    desc: "The things that moved you deserve to be remembered. Not just tracked — treasured.",
-  },
-];
 
 function Label({ children, centered }: { children: React.ReactNode; centered?: boolean }) {
   return (
@@ -50,21 +23,6 @@ function Label({ children, centered }: { children: React.ReactNode; centered?: b
   );
 }
 
-function CornerTick({ pos }: { pos: "tl" | "tr" | "bl" | "br" }) {
-  const positions: Record<string, React.CSSProperties> = {
-    tl: { top: -1, left: -1 },
-    tr: { top: -1, right: -1, transform: "scaleX(-1)" },
-    bl: { bottom: -1, left: -1, transform: "scaleY(-1)" },
-    br: { bottom: -1, right: -1, transform: "scale(-1)" },
-  };
-  return (
-    <div style={{ position: "absolute", width: 12, height: 12, opacity: 0.3, ...positions[pos] }}>
-      <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "0.5px", background: "var(--color-mist)" }} />
-      <div style={{ position: "absolute", top: 0, left: 0, width: "0.5px", height: "100%", background: "var(--color-mist)" }} />
-    </div>
-  );
-}
-
 export default function AboutPage() {
   return (
     <div
@@ -73,31 +31,9 @@ export default function AboutPage() {
     >
 
       {/* Back button */}
-      <Link
-        href="/"
-        className="absolute top-14 left-16 z-10 flex items-center justify-center w-9 h-9 rounded-full transition-all hover:-translate-x-0.5 hover:brightness-125"
-        style={{
-          background: "rgba(200,212,240,0.05)",
-          border: "1px solid rgba(200,212,240,0.1)",
-          color: "var(--color-mist)",
-        }}
-        aria-label="Go back"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M19 12H5" />
-          <path d="M12 19l-7-7 7-7" />
-        </svg>
-      </Link> 
+      <div className="absolute top-14 left-16 z-10">
+        <BackButton href="/" />
+      </div>
 
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none z-0">

@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -25,9 +24,10 @@
   --color-border-subtle:  rgba(200,212,240,0.07);
   --color-border-medium:  rgba(200,212,240,0.13);
 
-  --font-logo:     "Playfair Display", serif;
-  --font-display:  "Montserrat", sans-serif;
-  --font-body:     "Poppins", sans-serif;
+  /* Fonts loaded via next/font in app/layout.tsx — see --next-font-* variables applied on <html> */
+  --font-logo:     var(--next-font-playfair), serif;
+  --font-display:  var(--next-font-montserrat), sans-serif;
+  --font-body:     var(--next-font-poppins), sans-serif;
 }
 
 @layer base {

@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/utils/supabase/client";
 import { stars } from "@/designs/Stars";
 
 // Types
@@ -161,11 +163,20 @@ function MediaCard({ entry }: { entry: MediaEntry }) {
 // Page
 
 export default function DashboardPage() {
+  const router = useRouter();
+  const supabase = createClient();
+
   const [activeFilter, setActiveFilter] = useState<MediaType | "all">("all");
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const filteredFavorites = activeFilter === "all"
     ? favorites
     : favorites.filter((e) => e.type === activeFilter);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    router.push("/");
+  };
 
   return (
     <div className="min-h-screen bg-bg-base text-text-primary relative overflow-x-hidden">
@@ -206,18 +217,43 @@ export default function DashboardPage() {
         </div>
 
         {/* Avatar */}
-        <div className="flex items-center gap-3">
+        <div className="relative flex items-center gap-3">
           <span className="text-[0.6rem] tracking-[0.2em] uppercase text-text-muted hidden sm:block">
             cosmicwatcher
           </span>
-          <div className="w-8 h-8 rounded-full flex items-center justify-center text-[0.6rem] font-medium"
-               style={{
-                 background: "rgba(200,212,240,0.08)",
-                 border:     "1px solid rgba(200,212,240,0.12)",
-                 color:      "var(--color-mist)",
-               }}>
+          <button
+            onClick={() => setMenuOpen((v) => !v)}
+            className="w-8 h-8 rounded-full flex items-center justify-center text-[0.6rem] font-medium transition-all hover:brightness-125"
+            style={{
+              background: "rgba(200,212,240,0.08)",
+              border:     "1px solid rgba(200,212,240,0.12)",
+              color:      "var(--color-mist)",
+            }}
+          >
             CW
-          </div>
+          </button>
+
+          {menuOpen && (
+            <>
+              <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
+              <div
+                className="absolute right-0 top-11 z-20 py-1 rounded-xl overflow-hidden"
+                style={{
+                  background: "var(--color-bg-card)",
+                  border:     "1px solid rgba(200,212,240,0.12)",
+                  minWidth:   140,
+                }}
+              >
+                <button
+                  onClick={handleSignOut}
+                  className="w-full text-left px-4 py-2.5 text-[0.65rem] tracking-[0.15em] uppercase text-text-muted transition-colors hover:text-text-primary"
+                  style={{ background: "transparent" }}
+                >
+                  Sign out
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </nav>
 

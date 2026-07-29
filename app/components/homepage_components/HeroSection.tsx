@@ -105,19 +105,10 @@ export default function HeroSection() {
         }}
       />
 
-      {/* Film-frame hairlines */}
-      <div className="absolute left-8 right-8 pointer-events-none z-[3]"
-        style={{ top: 32, height: "0.5px", background: "var(--color-border-subtle)" }} />
-      <div className="absolute left-8 right-8 pointer-events-none z-[3]"
-        style={{ bottom: 32, height: "0.5px", background: "var(--color-border-subtle)" }} />
-
-      {/* Corner ticks */}
-      {(["tl", "tr", "bl", "br"] as const).map((p) => <CornerMark key={p} pos={p} />)}
-
       {/* Top nav — sign in / register */}
       <div
         className="absolute top-0 left-0 right-0 z-[6] flex items-center justify-between px-10"
-        style={{ height: 32 }}
+        style={{ height: 64 }}
       >
         {/* Left: wordmark hint */}
         <span
@@ -132,28 +123,30 @@ export default function HeroSection() {
         </span>
 
         {/* Right: auth links */}
-        <div className="flex items-center" style={{ gap: "0.1rem" }}>
+        <div className="flex items-center" style={{ gap: "0.7rem" }}>
           <Link
             href="/auth/login"
-            className="transition-colors hover:opacity-100"
+            className="transition-all hover:opacity-100 hover:brightness-125"
             style={{
-              fontSize: 9, letterSpacing: "0.28em",
-              textTransform: "uppercase", fontWeight: 400,
-              color: "var(--color-text-muted)", opacity: 0.55,
-              padding: "0.3rem 0.9rem",
+              fontSize: 11, letterSpacing: "0.2em",
+              textTransform: "uppercase", fontWeight: 500,
+              color: "var(--color-mist)", opacity: 0.85,
+              padding: "0.55rem 1.15rem",
+              border: "0.5px solid var(--color-border-medium)",
             }}
           >
             Sign in
           </Link>
-          <span style={{ width: "0.5px", height: 10, background: "var(--color-border-subtle)", display: "block", opacity: 0.6 }} />
+          
           <Link
             href="/auth/register"
-            className="transition-colors hover:opacity-100"
+            className="transition-all hover:brightness-110"
             style={{
-              fontSize: 9, letterSpacing: "0.28em",
-              textTransform: "uppercase", fontWeight: 400,
-              color: "var(--color-mist)", opacity: 0.7,
-              padding: "0.3rem 0.9rem",
+              fontSize: 11, letterSpacing: "0.2em",
+              textTransform: "uppercase", fontWeight: 500,
+              color: "var(--color-bg-base)",
+              background: "var(--color-mist)",
+              padding: "0.55rem 1.15rem",
             }}
           >
             Register
@@ -243,29 +236,46 @@ export default function HeroSection() {
             href="/auth/register"
             className="transition-all hover:brightness-110"
             style={{
-              padding: "0.65rem 1.9rem",
-              fontSize: 10, letterSpacing: "0.26em",
+              padding: "0.8rem 2.2rem",
+              fontSize: 11, letterSpacing: "0.26em",
               textTransform: "uppercase",
-              color: "var(--color-mist)",
-              background: "rgba(200,212,240,0.07)",
-              border: "0.5px solid var(--color-border-medium)",
-              fontWeight: 400,
+              color: "var(--color-bg-base)",
+              background: "var(--color-mist)",
+              fontWeight: 600,
             }}
           >
             Enter the Ether
           </Link>
           <Link
-            href="/about"
-            className="transition-colors"
+            href="/auth/login"
+            className="transition-all hover:brightness-125"
             style={{
-              fontSize: 10, letterSpacing: "0.22em",
+              padding: "0.8rem 2.2rem",
+              fontSize: 11, letterSpacing: "0.26em",
               textTransform: "uppercase",
-              color: "var(--color-text-muted)", fontWeight: 400,
+              color: "var(--color-mist)",
+              background: "rgba(200,212,240,0.07)",
+              border: "0.5px solid var(--color-border-medium)",
+              fontWeight: 500,
             }}
           >
-            About
+            Sign In
           </Link>
         </div>
+
+        {/* Secondary link */}
+        <Link
+          href="/about"
+          className="animate-fade-up [animation-delay:820ms] opacity-0 transition-colors hover:opacity-80 mt-5"
+          style={{
+            fontSize: 10, letterSpacing: "0.22em",
+            textTransform: "uppercase",
+            color: "var(--color-text-muted)", fontWeight: 400,
+            animationFillMode: "forwards",
+          }}
+        >
+          About
+        </Link>
       </div>
 
       {/* Scrolling marquee */}
